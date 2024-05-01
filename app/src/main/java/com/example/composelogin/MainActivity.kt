@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -78,7 +79,9 @@ fun Login() {
         }
 
 
-        val icon = if (passwordVisibility) Icons.Default.Check else Icons.Default.Clear
+        val icon = if (passwordVisibility) painterResource(id = R.drawable.eye_slash_path) else painterResource(
+            id = R.drawable.eye_path
+        )
 
 
         Image(
@@ -92,7 +95,7 @@ fun Login() {
             shape = RoundedCornerShape(26.dp),
             value = email,
             onValueChange = { email = it },
-            label = { Text(text = "lblEmail") },
+            label = { Text(text = "Email") },
             placeholder = {
                 Text(text = "email")
             }
@@ -103,13 +106,13 @@ fun Login() {
             shape = RoundedCornerShape(26.dp),
             modifier = Modifier.fillMaxWidth(),
             onValueChange = { password = it },
-            label = { Text(text = "lblPassword") },
+            label = { Text(text = "Password") },
             placeholder = {
                 Text(text = "password")
             },
             trailingIcon = {
                 IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
-                    Icon(imageVector = icon, contentDescription = "")
+                    Icon(painter = icon, contentDescription = "")
                 }
             },
             keyboardOptions = KeyboardOptions(
