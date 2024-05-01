@@ -4,12 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -29,11 +32,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.composelogin.ui.theme.ComposeLoginTheme
 
 class MainActivity : ComponentActivity() {
@@ -55,10 +60,14 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun Login(){
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(all = 10.dp), verticalArrangement = Arrangement.Center, Alignment.CenterHorizontally) {
+fun Login() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(all = 10.dp),
+        verticalArrangement = Arrangement.Center,
+        Alignment.CenterHorizontally
+    ) {
 
 
         var email by remember { mutableStateOf("") }
@@ -72,9 +81,15 @@ fun Login(){
         val icon = if (passwordVisibility) Icons.Default.Check else Icons.Default.Clear
 
 
-        Image(imageVector = Icons.Default.AccountCircle, contentDescription = "", modifier = Modifier.size(150.dp))
+        Image(
+            imageVector = Icons.Default.AccountCircle,
+            contentDescription = "",
+            modifier = Modifier.size(150.dp)
+        )
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(26.dp),
             value = email,
             onValueChange = { email = it },
             label = { Text(text = "lblEmail") },
@@ -85,6 +100,7 @@ fun Login(){
 
         OutlinedTextField(
             value = password,
+            shape = RoundedCornerShape(26.dp),
             modifier = Modifier.fillMaxWidth(),
             onValueChange = { password = it },
             label = { Text(text = "lblPassword") },
@@ -92,7 +108,7 @@ fun Login(){
                 Text(text = "password")
             },
             trailingIcon = {
-                IconButton(onClick = { passwordVisibility = !passwordVisibility}) {
+                IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                     Icon(imageVector = icon, contentDescription = "")
                 }
             },
@@ -102,8 +118,30 @@ fun Login(){
             visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation()
         )
 
-        Button(onClick = { }, modifier = Modifier.fillMaxWidth()) {
+        Button(
+            onClick = { }, modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp)
+        ) {
             Text(text = "Login")
+        }
+
+        Text(text = "Or", fontSize = 12.sp, modifier = Modifier.padding(top = 10.dp))
+        Box(
+            modifier = Modifier
+                .padding(top = 10.dp)
+                .border(
+                    width = 1.dp,
+                    color = Color.Black,
+                    shape = RoundedCornerShape(20.dp)
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+
+            Text(
+                text = "Register", modifier = Modifier
+                    .padding(all = 5.dp)
+            )
         }
 
     }
