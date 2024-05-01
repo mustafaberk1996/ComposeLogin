@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -193,21 +194,24 @@ fun SocialMediaArea(modifier:Modifier){
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        MediaIcon(painter = painterResource(id = R.drawable.twitter_svgrepo_com), contentDescription = "twitter")
-        MediaIcon(painter = painterResource(id = R.drawable.facebook_svgrepo_com), contentDescription = "facebook")
-        MediaIcon(painter = painterResource(id = R.drawable.pinterest_svgrepo_com), contentDescription = "pinterest")
-        MediaIcon(painter = painterResource(id = R.drawable.vimeo_svgrepo_com), contentDescription = "vimeo")
+        MediaIcon(painter = painterResource(id = R.drawable.twitter_svgrepo_com), contentDescription = "twitter", url = "https://www.twitter.com")
+        MediaIcon(painter = painterResource(id = R.drawable.facebook_svgrepo_com), contentDescription = "facebook", url = "https://www.facebook.com")
+        MediaIcon(painter = painterResource(id = R.drawable.pinterest_svgrepo_com), contentDescription = "pinterest", url = "https://www.pinterest.com")
+        MediaIcon(painter = painterResource(id = R.drawable.vimeo_svgrepo_com), contentDescription = "vimeo", url = "https://www.vimeo.com")
     }
 }
 
 @Composable
-fun MediaIcon(painter: Painter, contentDescription: String) {
+fun MediaIcon(painter: Painter, contentDescription: String, url: String? = null) {
+    val uriHandler = LocalUriHandler.current
     Image(
         painter = painter,
         contentDescription = contentDescription,
         modifier = Modifier
             .size(40.dp)
-            .padding(all = 10.dp)
+            .padding(all = 10.dp).clickable {
+                uriHandler.openUri(url.orEmpty())
+            }
     )
 }
 
