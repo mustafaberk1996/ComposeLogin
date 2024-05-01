@@ -78,6 +78,14 @@ fun Login() {
             var email by remember { mutableStateOf("") }
             var password by remember { mutableStateOf("") }
 
+            var emailError by remember { mutableStateOf(false) }
+            var passwordError by remember { mutableStateOf(false) }
+
+            var emailErrorMessage by remember { mutableStateOf("") }
+            var passwordErrorMessage by remember { mutableStateOf("") }
+
+
+
             var passwordVisibility by remember {
                 mutableStateOf(false)
             }
@@ -102,6 +110,12 @@ fun Login() {
                 label = { Text(text = "Email") },
                 placeholder = {
                     Text(text = "email")
+                },
+                isError = emailError,
+                supportingText = {
+                    if (emailError){
+                        Text(text = emailErrorMessage)
+                    }
                 }
             )
 
@@ -119,6 +133,12 @@ fun Login() {
                         Icon(painter = icon, contentDescription = "")
                     }
                 },
+                isError = passwordError,
+                supportingText = {
+                    if (passwordError) {
+                        Text(text = passwordErrorMessage)
+                    }
+                },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password
                 ),
@@ -126,7 +146,17 @@ fun Login() {
             )
 
             Button(
-                onClick = { }, modifier = Modifier
+                onClick = {
+                    emailError = email.isBlank()
+                    passwordError = password.isBlank()
+                    if (email.isBlank()) emailErrorMessage = "Email can't be null"
+                    if (password.isBlank()) passwordErrorMessage = "Password can't be null"
+
+                    if (email.isNotBlank() && password.isNotBlank()){
+                        //TODO
+                    }
+
+                }, modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 10.dp)
             ) {
@@ -138,9 +168,7 @@ fun Login() {
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .border(
-                        width = 1.dp,
-                        color = Color.Black,
-                        shape = RoundedCornerShape(20.dp)
+                        width = 1.dp, color = Color.Black, shape = RoundedCornerShape(20.dp)
                     ),
                 contentAlignment = Alignment.Center
             ) {
