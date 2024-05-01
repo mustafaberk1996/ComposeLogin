@@ -1,6 +1,7 @@
 package com.example.composelogin
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -18,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -75,6 +79,7 @@ fun Login() {
 
         ) {
 
+            val context = LocalContext.current
 
             var email by remember { mutableStateOf("") }
             var password by remember { mutableStateOf("") }
@@ -85,10 +90,26 @@ fun Login() {
             var emailErrorMessage by remember { mutableStateOf("") }
             var passwordErrorMessage by remember { mutableStateOf("") }
 
-
+            var showLoggedInDialog by remember { mutableStateOf(false) }
 
             var passwordVisibility by remember {
                 mutableStateOf(false)
+            }
+
+
+            if (showLoggedInDialog) {
+                MyAlertDialog(
+                    icon = painterResource(id = R.drawable.info_circle_duo),
+                    title = "Success",
+                    message = "You have successfully logged in!",
+                    onDismissRequest = {
+                        showLoggedInDialog = false
+                    },
+                    onConfirmation = {
+                        showLoggedInDialog = false
+                        Toast.makeText(context,"Confirmed!",Toast.LENGTH_LONG).show()
+                    }
+                )
             }
 
 
@@ -153,9 +174,7 @@ fun Login() {
                     if (email.isBlank()) emailErrorMessage = "Email can't be null"
                     if (password.isBlank()) passwordErrorMessage = "Password can't be null"
 
-                    if (email.isNotBlank() && password.isNotBlank()){
-                        //TODO
-                    }
+                    showLoggedInDialog = email.isNotBlank() && password.isNotBlank()
 
                 }, modifier = Modifier
                     .fillMaxWidth()
@@ -185,7 +204,42 @@ fun Login() {
 
     }
 
+}
 
+@Composable
+fun MyAlertDialog(icon:Painter, title:String, message:String, onDismissRequest:()->Unit, onConfirmation:()->Unit,){
+    AlertDialog(
+        icon = {
+            Icon(icon, contentDescription = "Example Icon")
+        },
+        title = {
+            Text(text = title)
+        },
+        text = {
+            Text(text = message)
+        },
+        onDismissRequest = {
+            onDismissRequest()
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    onConfirmation()
+                }
+            ) {
+                Text("Confirm")
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = {
+                    onDismissRequest()
+                }
+            ) {
+                Text("Dismiss")
+            }
+        }
+    )
 }
 
 @Composable
@@ -209,7 +263,8 @@ fun MediaIcon(painter: Painter, contentDescription: String, url: String? = null)
         contentDescription = contentDescription,
         modifier = Modifier
             .size(40.dp)
-            .padding(all = 10.dp).clickable {
+            .padding(all = 10.dp)
+            .clickable {
                 uriHandler.openUri(url.orEmpty())
             }
     )
