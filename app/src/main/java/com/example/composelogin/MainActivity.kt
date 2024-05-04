@@ -177,13 +177,23 @@ fun Login() {
 
             Button(
                 onClick = {
-                    emailError = email.isBlank()
+                    emailError = email.isBlank() ||  !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
                     passwordError = password.isBlank()
-                    if (email.isBlank()) emailErrorMessage = "Email can't be null"
+                    var isEmailValid = false
+                    if (email.isBlank()) {
+                        emailErrorMessage = "Email can't be null"
+                    } else{
+                        isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+                        if (!isEmailValid) emailErrorMessage = "Invalid Email"
+                    }
+
                     if (password.isBlank()) passwordErrorMessage = "Password can't be null"
 
-                    showLoggedInDialog = email.isNotBlank() && password.isNotBlank()
-                    if (showLoggedInDialog) MediaPlayer.create(context, R.raw.collect_points).start()
+                    if (email.isBlank() || password.isBlank() || !isEmailValid) return@Button
+
+
+                    showLoggedInDialog = true
+                    MediaPlayer.create(context, R.raw.collect_points).start()
 
                 }, modifier = Modifier
                     .fillMaxWidth()
