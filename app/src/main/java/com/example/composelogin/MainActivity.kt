@@ -126,16 +126,8 @@ fun Login() {
             )
 
 
-            AsyncImage(
-                model = Constants.flowerLinks.random(),
-                contentDescription = "",
-                modifier = Modifier
-                    .size(150.dp)
-                    .fillMaxSize()
-                    .clip(CircleShape)
-                    .border(2.dp, color = Color.Black, shape = CircleShape),
-                contentScale = ContentScale.Crop
-            )
+            ProfileImageComponent()
+
             OutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -216,6 +208,20 @@ fun Login() {
         SocialMediaArea(modifier = Modifier.align(Alignment.BottomCenter))
     }
 
+}
+
+@Composable
+fun ProfileImageComponent(){
+    AsyncImage(
+        model = Constants.flowerLinks.random(),
+        contentDescription = "",
+        modifier = Modifier
+            .size(150.dp)
+            .fillMaxSize()
+            .clip(CircleShape)
+            .border(2.dp, color = Color.Black, shape = CircleShape),
+        contentScale = ContentScale.Crop
+    )
 }
 
 @Composable
