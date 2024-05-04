@@ -11,6 +11,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,6 +47,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -213,13 +215,14 @@ fun Login() {
 @Composable
 fun ProfileImageComponent(){
     AsyncImage(
+        placeholder = painterResource(id = R.drawable.ic_spa_duo),
         model = Constants.flowerLinks.random(),
         contentDescription = "",
         modifier = Modifier
             .size(150.dp)
             .fillMaxSize()
             .clip(CircleShape)
-            .border(2.dp, color = Color.Black, shape = CircleShape),
+            .border(2.dp, color = colorResource(id = R.color.primaryBlue), shape = CircleShape),
         contentScale = ContentScale.Crop
     )
 }
