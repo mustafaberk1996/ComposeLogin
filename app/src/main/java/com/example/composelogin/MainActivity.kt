@@ -1,5 +1,6 @@
 package com.example.composelogin
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -182,6 +183,7 @@ fun Login() {
                     if (password.isBlank()) passwordErrorMessage = "Password can't be null"
 
                     showLoggedInDialog = email.isNotBlank() && password.isNotBlank()
+                    if (showLoggedInDialog) MediaPlayer.create(context, R.raw.collect_points).start()
 
                 }, modifier = Modifier
                     .fillMaxWidth()
