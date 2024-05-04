@@ -4,17 +4,24 @@
     <string name="login.screen.outline.textfield.email.label">Email</string>
     <string name="login.screen.outline.textfield.password.label">Parola</string>
 
-    <string name="login.screen.error.message.empty.email">Email boş olamaz</string>
-    <string name="login.screen.error.message.invalid.email">Geçersiz email</string>
-    <string name="login.screen.error.message.empty.password">Parola boş olamaz</string>
+    <string name="error.message.empty.email">Email boş olamaz</string>
+    <string name="error.message.invalid.email">Geçersiz email</string>
+    <string name="error.message.empty.password">Parola boş olamaz</string>
 
     <string name="login.screen.login.button.text">Giriş</string>
-    <string name="login.screen.register.button.text">Kayıt Ol</string>
+    <string name="login.screen.go.register.text">Kayıt Ol</string>
 
     <string name="login.screen.logged.in.dialog.title">Başarılı</string>
     <string name="login.screen.logged.in.dialog.message">Başarılı şekilde giriş yaptınız!</string>
     <string name="login.screen.logged.in.dialog.confirm.button.text">Onay</string>
     <string name="login.screen.logged.in.dialog.dismiss.button.text">Kapat</string>
 
-    <string name="login_screen_or_label_text">Ya da</string>
+    <string name="or_label_text">Ya da</string>
+    <string name="register.screen.outline.textfield.name.label">Ad</string>
+    <string name="register.screen.outline.textfield.surname.label">Soyad</string>
+    <string name="register.screen.outline.textfield.email.label">Email</string>
+    <string name="register.screen.outline.textfield.password.label">Parola</string>
+    <string name="register.screen.outline.textfield.password.again.label">Parola (Tekrar)</string>
+    <string name="register.screen.register.button.text">Kayıt Ol</string>
+    <string name="register.screen.go.login.text">Giriş Yap</string>
 </resources>

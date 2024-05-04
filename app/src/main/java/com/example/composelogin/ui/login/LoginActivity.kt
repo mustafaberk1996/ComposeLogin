@@ -1,4 +1,4 @@
-package com.example.composelogin
+package com.example.composelogin.ui.login
 
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -65,6 +65,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.example.composelogin.Constants
+import com.example.composelogin.R
 import com.example.composelogin.ui.theme.ComposeLoginTheme
 import kotlinx.coroutines.delay
 import java.util.Locale
@@ -90,13 +92,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
-
-@Composable
-fun Register(navigateLogin: () -> Unit) {
-    Text(text = "Register", modifier = Modifier.clickable {
-        navigateLogin()
-    })
 }
 
 @Composable
@@ -280,13 +275,16 @@ fun Login(navigateRegister:()->Unit) {
                     var isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
                     emailError = email.isBlank() || !isEmailValid
                     passwordError = password.isBlank()
-                    if (email.isBlank()) emailErrorMessageResource = R.string.login_screen_error_message_empty_email
+                    if (email.isBlank()) emailErrorMessageResource =
+                        R.string.error_message_empty_email
                     else {
                         isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-                        if (!isEmailValid) emailErrorMessageResource = R.string.login_screen_error_message_invalid_email
+                        if (!isEmailValid) emailErrorMessageResource =
+                            R.string.error_message_invalid_email
                     }
 
-                    if (password.isBlank()) passwordErrorMessageResource = R.string.login_screen_error_message_empty_password
+                    if (password.isBlank()) passwordErrorMessageResource =
+                        R.string.error_message_empty_password
 
                     if (email.isBlank() || password.isBlank() || !isEmailValid) return@Button
 
@@ -300,7 +298,7 @@ fun Login(navigateRegister:()->Unit) {
                 Text(text = stringResource(id = R.string.login_screen_login_button_text))
             }
 
-            Text(text = stringResource(id = R.string.login_screen_or_label_text), fontSize = 12.sp, modifier = Modifier.padding(top = 10.dp))
+            Text(text = stringResource(id = R.string.or_label_text), fontSize = 12.sp, modifier = Modifier.padding(top = 10.dp))
             Box(
                 modifier = Modifier
                     .padding(top = 10.dp)
@@ -314,7 +312,7 @@ fun Login(navigateRegister:()->Unit) {
             ) {
 
                 Text(
-                    text = stringResource(id = R.string.login_screen_register_button_text), modifier = Modifier
+                    text = stringResource(id = R.string.login_screen_go_register_text), modifier = Modifier
                         .padding(all = 5.dp)
                 )
             }
