@@ -1,7 +1,9 @@
 # ComposeLogin
 This is a login screen that written with compose. In this repo I am building a login screen using with compose. I will update this repo as soon as I add new features.
 
-Building this repo with Android Studio Iguana | 2023.2.1 Patch 2
+Building this repo with Android Studio Jellyfish | 2023.3.1
+
+
 
 
 # Libraries
@@ -12,14 +14,30 @@ Building this repo with Android Studio Iguana | 2023.2.1 Patch 2
 # Features
 - Empty check
 - Email validation
-- Showing random image
+- Showing random flower image on background
 - Display/hide password text
 - Show Alert Dialog
+- Horizontal progressbar
+- Random profile image border size and color
+- Random user image at the first time you open the app
 
 # Screen Views
 
-<img src="https://github.com/mustafaberk1996/ComposeLogin/assets/57665619/2304a98a-40e1-41ec-ad48-f0af3923faf3" width="200px" />
-<img src="https://github.com/mustafaberk1996/ComposeLogin/assets/57665619/50e34c3a-f5ea-4a5e-8b97-e3731268ae7c" width="200px" />
+<img src="https://github.com/mustafaberk1996/ComposeLogin/assets/57665619/af131cbf-46ad-475b-9dd2-42f0c963afed" width="170px"/>
+<img src="https://github.com/mustafaberk1996/ComposeLogin/assets/57665619/9145afd8-235a-4706-9f4f-99267896100b" width="170px"/>
+<img src="https://github.com/mustafaberk1996/ComposeLogin/assets/57665619/13d78b38-ec47-4fc1-b960-60d8207261eb" width="170px"/>
+<img src="https://github.com/mustafaberk1996/ComposeLogin/assets/57665619/708b2ec7-00be-477d-9a77-a61b1cd74c51" width="170px"/>
+<img src="https://github.com/mustafaberk1996/ComposeLogin/assets/57665619/2b6d79d8-208f-4b1d-b5c3-22c9ba8d2c75" width="170px"/>
+
+# Screen Video
+
+<video autoplay="true" src="https://github.com/mustafaberk1996/ComposeLogin/assets/57665619/dbd60b81-1b4b-4d02-b8f9-b63a6e9f27ff" width="100px" />
+
+
+
+
+
+
 
 # Resources
 - https://developer.android.com/develop/ui/compose/documentation
