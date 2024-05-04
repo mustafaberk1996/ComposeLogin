@@ -8,10 +8,12 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +22,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -35,6 +38,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -48,7 +52,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -59,6 +62,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.composelogin.ui.theme.ComposeLoginTheme
+import kotlinx.coroutines.delay
 import java.util.Locale
 
 class MainActivity : ComponentActivity() {
@@ -78,6 +82,54 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@Composable
+fun ImageSlider(){
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(5000) // 5 saniye bekle
+            var backgroundColor = Color(
+                (0..255).random(),
+                (0..255).random(),
+                (0..255).random()
+            )
+        }
+    }
+}
+
+@Composable
+fun SliderProgressBar(modifier: Modifier = Modifier){
+
+    var progress by remember { mutableStateOf(1f) }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(5)
+            progress -= 0.001f
+            if (progress <= 0f) {
+                progress = 0f
+                progress = 1.0f
+            }
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(8.dp)
+            .background(color = Color.LightGray, shape = RoundedCornerShape(4.dp))
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(progress)
+                .height(8.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(4.dp)
+                )
+        )
+    }
+}
+
 
 @Composable
 fun Login() {
@@ -85,6 +137,9 @@ fun Login() {
         modifier = Modifier
             .fillMaxSize()
     ) {
+
+        SliderProgressBar(modifier = Modifier.align(Alignment.TopCenter))
+
         Column(
             modifier = Modifier
                 .align(Alignment.Center)
@@ -135,7 +190,10 @@ fun Login() {
                 )
 
 
-            ProfileImageComponent()
+            val randomFlower by remember {
+                mutableStateOf(Constants.flowerLinks.random())
+            }
+            ProfileImageComponent(randomFlower)
 
             OutlinedTextField(
                 modifier = Modifier
@@ -231,16 +289,36 @@ fun Login() {
 }
 
 @Composable
-fun ProfileImageComponent() {
+fun ProfileImageComponent(randomFlower: String) {
+    var borderSize by remember { mutableStateOf(1.dp) }
+
+    val animatedBorderSize by animateFloatAsState(
+        targetValue = borderSize.value,
+        animationSpec = tween(durationMillis = 1000), label = ""
+    )
+    var borderColor by remember { mutableStateOf(Color.Black) }
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(3000)
+            borderSize = (1..5).random().dp
+            borderColor = Color(
+                (0..255).random(),
+                (0..255).random(),
+                (0..255).random()
+            )
+        }
+    }
+
     AsyncImage(
         placeholder = painterResource(id = R.drawable.ic_spa_duo),
-        model = Constants.flowerLinks.random(),
+        model = randomFlower,
         contentDescription = "",
         modifier = Modifier
             .size(150.dp)
             .fillMaxSize()
             .clip(CircleShape)
-            .border(2.dp, color = colorResource(id = R.color.primaryBlue), shape = CircleShape),
+            .border(animatedBorderSize.dp, color = borderColor, shape = CircleShape),
         contentScale = ContentScale.Crop
     )
 }
