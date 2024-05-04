@@ -4,6 +4,12 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,8 +24,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -210,7 +214,6 @@ fun Login() {
 
         }
         SocialMediaArea(modifier = Modifier.align(Alignment.BottomCenter))
-
     }
 
 }
@@ -253,14 +256,29 @@ fun MyAlertDialog(icon:Painter, title:String, message:String, onDismissRequest:(
 
 @Composable
 fun SocialMediaArea(modifier:Modifier){
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
+    AnimatedVisibility(
+        modifier = modifier,
+        visible = true,
+        enter = slideInVertically(
+            // Enters by sliding down from offset -fullHeight to 0.
+            initialOffsetY = { fullHeight -> -fullHeight },
+            animationSpec = tween(durationMillis = 150, easing = LinearOutSlowInEasing)
+        ),
+        exit = slideOutVertically(
+            // Exits by sliding up from offset 0 to -fullHeight.
+            targetOffsetY = { fullHeight -> -fullHeight },
+            animationSpec = tween(durationMillis = 250, easing = FastOutLinearInEasing)
+        )
     ) {
-        MediaIcon(painter = painterResource(id = R.drawable.twitter_svgrepo_com), contentDescription = "twitter", url = "https://www.twitter.com")
-        MediaIcon(painter = painterResource(id = R.drawable.facebook_svgrepo_com), contentDescription = "facebook", url = "https://www.facebook.com")
-        MediaIcon(painter = painterResource(id = R.drawable.pinterest_svgrepo_com), contentDescription = "pinterest", url = "https://www.pinterest.com")
-        MediaIcon(painter = painterResource(id = R.drawable.vimeo_svgrepo_com), contentDescription = "vimeo", url = "https://www.vimeo.com")
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            MediaIcon(painter = painterResource(id = R.drawable.twitter_svgrepo_com), contentDescription = "twitter", url = "https://www.twitter.com")
+            MediaIcon(painter = painterResource(id = R.drawable.facebook_svgrepo_com), contentDescription = "facebook", url = "https://www.facebook.com")
+            MediaIcon(painter = painterResource(id = R.drawable.pinterest_svgrepo_com), contentDescription = "pinterest", url = "https://www.pinterest.com")
+            MediaIcon(painter = painterResource(id = R.drawable.vimeo_svgrepo_com), contentDescription = "vimeo", url = "https://www.vimeo.com")
+        }
     }
 }
 
