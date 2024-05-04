@@ -12,7 +12,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -37,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -50,6 +50,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -58,6 +59,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.composelogin.ui.theme.ComposeLoginTheme
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,8 +81,10 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Login() {
-    Box(modifier = Modifier
-        .fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
         Column(
             modifier = Modifier
                 .align(Alignment.Center)
@@ -88,7 +92,7 @@ fun Login() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
 
-        ) {
+            ) {
 
             val context = LocalContext.current
 
@@ -98,8 +102,8 @@ fun Login() {
             var emailError by remember { mutableStateOf(false) }
             var passwordError by remember { mutableStateOf(false) }
 
-            var emailErrorMessage by remember { mutableStateOf("") }
-            var passwordErrorMessage by remember { mutableStateOf("") }
+            var emailErrorMessageResource by remember { mutableIntStateOf(-1) }
+            var passwordErrorMessageResource by remember { mutableIntStateOf(-1) }
 
             var showLoggedInDialog by remember { mutableStateOf(false) }
 
@@ -108,25 +112,27 @@ fun Login() {
             }
 
 
+            val toastMessage = stringResource(id = R.string.login_screen_logged_in_dialog_confirm_button_text)
             if (showLoggedInDialog) {
                 MyAlertDialog(
                     icon = painterResource(id = R.drawable.info_circle_duo),
-                    title = "Success",
-                    message = "You have successfully logged in!",
+                    title = stringResource(id = R.string.login_screen_logged_in_dialog_title),
+                    message = stringResource(id = R.string.login_screen_logged_in_dialog_message),
                     onDismissRequest = {
                         showLoggedInDialog = false
                     },
                     onConfirmation = {
                         showLoggedInDialog = false
-                        Toast.makeText(context,"Confirmed!",Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, toastMessage, Toast.LENGTH_LONG).show()
                     }
                 )
             }
 
 
-            val icon = if (passwordVisibility) painterResource(id = R.drawable.eye_slash_path) else painterResource(
-                id = R.drawable.eye_path
-            )
+            val icon =
+                if (passwordVisibility) painterResource(id = R.drawable.eye_slash_path) else painterResource(
+                    id = R.drawable.eye_path
+                )
 
 
             ProfileImageComponent()
@@ -137,14 +143,16 @@ fun Login() {
                 shape = RoundedCornerShape(26.dp),
                 value = email,
                 onValueChange = { email = it },
-                label = { Text(text = "Email") },
+                label = { Text(text = stringResource(id = R.string.login_screen_outline_textfield_email_label)) },
                 placeholder = {
-                    Text(text = "email")
+                    Text(text = stringResource(id = R.string.login_screen_outline_textfield_email_label).lowercase(
+                        Locale.getDefault()
+                    ))
                 },
                 isError = emailError,
                 supportingText = {
-                    if (emailError){
-                        Text(text = emailErrorMessage)
+                    if (emailError) {
+                        Text(text = stringResource(id = emailErrorMessageResource))
                     }
                 }
             )
@@ -154,9 +162,9 @@ fun Login() {
                 shape = RoundedCornerShape(26.dp),
                 modifier = Modifier.fillMaxWidth(),
                 onValueChange = { password = it },
-                label = { Text(text = "Password") },
+                label = { Text(text = stringResource(id = R.string.login_screen_outline_textfield_password_label)) },
                 placeholder = {
-                    Text(text = "password")
+                    Text(text = stringResource(id = R.string.login_screen_outline_textfield_password_label).lowercase(Locale.getDefault()))
                 },
                 trailingIcon = {
                     IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
@@ -166,7 +174,7 @@ fun Login() {
                 isError = passwordError,
                 supportingText = {
                     if (passwordError) {
-                        Text(text = passwordErrorMessage)
+                        Text(text = stringResource(id = passwordErrorMessageResource))
                     }
                 },
                 keyboardOptions = KeyboardOptions(
@@ -177,20 +185,18 @@ fun Login() {
 
             Button(
                 onClick = {
-                    emailError = email.isBlank() ||  !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+                    var isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+                    emailError = email.isBlank() || !isEmailValid
                     passwordError = password.isBlank()
-                    var isEmailValid = false
-                    if (email.isBlank()) {
-                        emailErrorMessage = "Email can't be null"
-                    } else{
+                    if (email.isBlank()) emailErrorMessageResource = R.string.login_screen_error_message_empty_email
+                    else {
                         isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-                        if (!isEmailValid) emailErrorMessage = "Invalid Email"
+                        if (!isEmailValid) emailErrorMessageResource = R.string.login_screen_error_message_invalid_email
                     }
 
-                    if (password.isBlank()) passwordErrorMessage = "Password can't be null"
+                    if (password.isBlank()) passwordErrorMessageResource = R.string.login_screen_error_message_empty_password
 
                     if (email.isBlank() || password.isBlank() || !isEmailValid) return@Button
-
 
                     showLoggedInDialog = true
                     MediaPlayer.create(context, R.raw.collect_points).start()
@@ -199,10 +205,10 @@ fun Login() {
                     .fillMaxWidth()
                     .padding(top = 10.dp)
             ) {
-                Text(text = "Login")
+                Text(text = stringResource(id = R.string.login_screen_login_button_text))
             }
 
-            Text(text = "Or", fontSize = 12.sp, modifier = Modifier.padding(top = 10.dp))
+            Text(text = stringResource(id = R.string.login_screen_or_label_text), fontSize = 12.sp, modifier = Modifier.padding(top = 10.dp))
             Box(
                 modifier = Modifier
                     .padding(top = 10.dp)
@@ -213,7 +219,7 @@ fun Login() {
             ) {
 
                 Text(
-                    text = "Register", modifier = Modifier
+                    text = stringResource(id = R.string.login_screen_register_button_text), modifier = Modifier
                         .padding(all = 5.dp)
                 )
             }
@@ -225,7 +231,7 @@ fun Login() {
 }
 
 @Composable
-fun ProfileImageComponent(){
+fun ProfileImageComponent() {
     AsyncImage(
         placeholder = painterResource(id = R.drawable.ic_spa_duo),
         model = Constants.flowerLinks.random(),
@@ -240,7 +246,13 @@ fun ProfileImageComponent(){
 }
 
 @Composable
-fun MyAlertDialog(icon:Painter, title:String, message:String, onDismissRequest:()->Unit, onConfirmation:()->Unit,){
+fun MyAlertDialog(
+    icon: Painter,
+    title: String,
+    message: String,
+    onDismissRequest: () -> Unit,
+    onConfirmation:() -> Unit,
+) {
     AlertDialog(
         icon = {
             Icon(icon, contentDescription = "Example Icon")
@@ -260,7 +272,7 @@ fun MyAlertDialog(icon:Painter, title:String, message:String, onDismissRequest:(
                     onConfirmation()
                 }
             ) {
-                Text("Confirm")
+                Text(stringResource(id = R.string.login_screen_logged_in_dialog_confirm_button_text))
             }
         },
         dismissButton = {
@@ -269,14 +281,14 @@ fun MyAlertDialog(icon:Painter, title:String, message:String, onDismissRequest:(
                     onDismissRequest()
                 }
             ) {
-                Text("Dismiss")
+                Text(stringResource(id = R.string.login_screen_logged_in_dialog_dismiss_button_text))
             }
         }
     )
 }
 
 @Composable
-fun SocialMediaArea(modifier:Modifier){
+fun SocialMediaArea(modifier: Modifier) {
     AnimatedVisibility(
         modifier = modifier,
         visible = true,
@@ -295,10 +307,26 @@ fun SocialMediaArea(modifier:Modifier){
             modifier = modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            MediaIcon(painter = painterResource(id = R.drawable.twitter_svgrepo_com), contentDescription = "twitter", url = "https://www.twitter.com")
-            MediaIcon(painter = painterResource(id = R.drawable.facebook_svgrepo_com), contentDescription = "facebook", url = "https://www.facebook.com")
-            MediaIcon(painter = painterResource(id = R.drawable.pinterest_svgrepo_com), contentDescription = "pinterest", url = "https://www.pinterest.com")
-            MediaIcon(painter = painterResource(id = R.drawable.vimeo_svgrepo_com), contentDescription = "vimeo", url = "https://www.vimeo.com")
+            MediaIcon(
+                painter = painterResource(id = R.drawable.twitter_svgrepo_com),
+                contentDescription = "twitter",
+                url = "https://www.twitter.com"
+            )
+            MediaIcon(
+                painter = painterResource(id = R.drawable.facebook_svgrepo_com),
+                contentDescription = "facebook",
+                url = "https://www.facebook.com"
+            )
+            MediaIcon(
+                painter = painterResource(id = R.drawable.pinterest_svgrepo_com),
+                contentDescription = "pinterest",
+                url = "https://www.pinterest.com"
+            )
+            MediaIcon(
+                painter = painterResource(id = R.drawable.vimeo_svgrepo_com),
+                contentDescription = "vimeo",
+                url = "https://www.vimeo.com"
+            )
         }
     }
 }

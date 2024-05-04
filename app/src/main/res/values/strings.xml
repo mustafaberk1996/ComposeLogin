@@ -1,3 +1,20 @@
 <resources>
-    <string name="app_name">ComposeLogin</string>
+    <string name="app_name" translatable="false">Compose Login</string>
+
+    <string name="login.screen.outline.textfield.email.label">Email</string>
+    <string name="login.screen.outline.textfield.password.label">Password</string>
+
+    <string name="login.screen.error.message.empty.email">Email can\'t be null</string>
+    <string name="login.screen.error.message.invalid.email">Invalid email</string>
+    <string name="login.screen.error.message.empty.password">Password can\'t be null</string>
+
+    <string name="login.screen.login.button.text">Login</string>
+    <string name="login.screen.register.button.text">Register</string>
+
+    <string name="login.screen.logged.in.dialog.title">Success</string>
+    <string name="login.screen.logged.in.dialog.message">You have successfully logged in!</string>
+    <string name="login.screen.logged.in.dialog.confirm.button.text">Confirm</string>
+    <string name="login.screen.logged.in.dialog.dismiss.button.text">Dismiss</string>
+
+    <string name="login_screen_or_label_text">Or</string>
 </resources>
