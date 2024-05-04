@@ -61,6 +61,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.composelogin.ui.theme.ComposeLoginTheme
 import kotlinx.coroutines.delay
@@ -76,11 +79,24 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Login()
+
+                    val navController = rememberNavController()
+                    NavHost(navController = navController, startDestination = "login") {
+                        composable("login") { Login(){navController.navigate("register")} }
+                        composable("register") { Register(){navController.navigate("login")} }
+                        // Add more destinations similarly.
+                    }
                 }
             }
         }
     }
+}
+
+@Composable
+fun Register(navigateLogin: () -> Unit) {
+    Text(text = "Register", modifier = Modifier.clickable {
+        navigateLogin()
+    })
 }
 
 @Composable
@@ -134,8 +150,7 @@ fun SliderProgressBar(timeFinished:()->Unit){
             .fillMaxWidth()
             .height(8.dp)
             .background(
-                color = Color.Transparent,
-                shape = RoundedCornerShape(4.dp)
+                color = Color.Transparent, shape = RoundedCornerShape(4.dp)
             )
     ) {
         Box(
@@ -143,8 +158,7 @@ fun SliderProgressBar(timeFinished:()->Unit){
                 .fillMaxWidth(progress)
                 .height(8.dp)
                 .background(
-                    color = MaterialTheme.colorScheme.primary,
-                    shape = RoundedCornerShape(4.dp)
+                    color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(4.dp)
                 )
         )
     }
@@ -152,7 +166,7 @@ fun SliderProgressBar(timeFinished:()->Unit){
 
 
 @Composable
-fun Login() {
+fun Login(navigateRegister:()->Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -292,7 +306,10 @@ fun Login() {
                     .padding(top = 10.dp)
                     .border(
                         width = 1.dp, color = Color.Black, shape = RoundedCornerShape(20.dp)
-                    ),
+                    )
+                    .clickable {
+                        navigateRegister()
+                    },
                 contentAlignment = Alignment.Center
             ) {
 
@@ -448,6 +465,6 @@ fun MediaIcon(painter: Painter, contentDescription: String, url: String? = null)
 @Composable
 fun LoginPreview() {
     ComposeLoginTheme {
-        Login()
+        Login(){}
     }
 }
