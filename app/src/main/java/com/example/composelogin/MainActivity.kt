@@ -52,6 +52,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -83,21 +84,36 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ImageSlider(){
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(5000) // 5 saniye bekle
-            var backgroundColor = Color(
-                (0..255).random(),
-                (0..255).random(),
-                (0..255).random()
-            )
+fun ImageSlider() {
+    var randomImage by remember { mutableStateOf(Constants.flowerLinks.random()) }
+
+    Box{
+        AsyncImage(
+            model = randomImage,
+            contentDescription = "",
+            modifier = Modifier
+                .fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(color = colorResource(id = R.color.slider_image_white_shadow)))
+
+        SliderProgressBar {
+            randomImage = Constants.flowerLinks.random()
         }
     }
 }
 
+@Preview
 @Composable
-fun SliderProgressBar(modifier: Modifier = Modifier){
+fun ImageSliderPreview(){
+    ImageSlider()
+}
+
+@Composable
+fun SliderProgressBar(timeFinished:()->Unit){
 
     var progress by remember { mutableStateOf(1f) }
 
@@ -106,6 +122,7 @@ fun SliderProgressBar(modifier: Modifier = Modifier){
             delay(5)
             progress -= 0.001f
             if (progress <= 0f) {
+                timeFinished()
                 progress = 0f
                 progress = 1.0f
             }
@@ -116,7 +133,10 @@ fun SliderProgressBar(modifier: Modifier = Modifier){
         modifier = Modifier
             .fillMaxWidth()
             .height(8.dp)
-            .background(color = Color.LightGray, shape = RoundedCornerShape(4.dp))
+            .background(
+                color = Color.Transparent,
+                shape = RoundedCornerShape(4.dp)
+            )
     ) {
         Box(
             modifier = Modifier
@@ -138,7 +158,7 @@ fun Login() {
             .fillMaxSize()
     ) {
 
-        SliderProgressBar(modifier = Modifier.align(Alignment.TopCenter))
+        ImageSlider()
 
         Column(
             modifier = Modifier
@@ -301,7 +321,7 @@ fun ProfileImageComponent(randomFlower: String) {
     LaunchedEffect(Unit) {
         while (true) {
             delay(3000)
-            borderSize = (1..5).random().dp
+            borderSize = (1..10).random().dp
             borderColor = Color(
                 (0..255).random(),
                 (0..255).random(),
