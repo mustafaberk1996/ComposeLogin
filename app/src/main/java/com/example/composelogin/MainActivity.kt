@@ -210,10 +210,10 @@ fun Login() {
                 )
 
 
-            val randomFlower by remember {
-                mutableStateOf(Constants.flowerLinks.random())
+            val randomUserImageLink by remember {
+                mutableStateOf(Constants.users.random())
             }
-            ProfileImageComponent(randomFlower)
+            ProfileImageComponent(randomUserImageLink)
 
             OutlinedTextField(
                 modifier = Modifier
@@ -309,7 +309,7 @@ fun Login() {
 }
 
 @Composable
-fun ProfileImageComponent(randomFlower: String) {
+fun ProfileImageComponent(randomUserImageLink: String) {
     var borderSize by remember { mutableStateOf(1.dp) }
 
     val animatedBorderSize by animateFloatAsState(
@@ -332,7 +332,7 @@ fun ProfileImageComponent(randomFlower: String) {
 
     AsyncImage(
         placeholder = painterResource(id = R.drawable.ic_spa_duo),
-        model = randomFlower,
+        model = randomUserImageLink,
         contentDescription = "",
         modifier = Modifier
             .size(150.dp)
