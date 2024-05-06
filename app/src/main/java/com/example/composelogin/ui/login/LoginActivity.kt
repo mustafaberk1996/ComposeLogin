@@ -78,11 +78,21 @@ class LoginActivity : ComponentActivity() {
 fun LoginScreen() {
     Box(modifier = Modifier.fillMaxSize()){
         val navController = rememberNavController()
+        var visibleSocialMediaArea by remember {
+            mutableStateOf(true)
+        }
         NavHost(navController = navController, startDestination = "login") {
             composable("login") { Login(){navController.navigate("register")} }
-            composable("register") { Register(){navController.navigate("login")} }
+            composable("register") {
+                Register(
+                    onSnackbarVisibleListener = { snackbarVisiblity ->
+                        visibleSocialMediaArea = !snackbarVisiblity
+                    },
+                    navigateLogin = { navController.navigate("login") }
+                )
+            }
         }
-        SocialMediaArea(modifier = Modifier.align(Alignment.BottomCenter))
+        if (visibleSocialMediaArea) SocialMediaArea(modifier = Modifier.align(Alignment.BottomCenter))
     }
 }
 

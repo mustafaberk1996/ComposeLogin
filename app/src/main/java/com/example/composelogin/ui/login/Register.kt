@@ -51,7 +51,7 @@ data class SnackbarState(
     val duration: SnackbarDuration = SnackbarDuration.Short
 )
 @Composable
-fun Register(navigateLogin: () -> Unit){
+fun Register(navigateLogin: () -> Unit, onSnackbarVisibleListener: (snackbarVisiblity:Boolean) -> Unit) {
 
     val context = LocalContext.current
 
@@ -219,6 +219,7 @@ fun Register(navigateLogin: () -> Unit){
             }
         }
 
+        onSnackbarVisibleListener(visibleSnackbar)
         if (visibleSnackbar) {
             val message = stringResource(id = snackbarState.message)
             val actionText =
@@ -252,9 +253,9 @@ fun RegisterPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
 
-            Register {
+            Register({
 
-            }
+            }) { visible -> }
         }
     }
 }
