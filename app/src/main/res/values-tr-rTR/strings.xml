@@ -24,4 +24,8 @@
     <string name="register.screen.outline.textfield.password.again.label">Parola (Tekrar)</string>
     <string name="register.screen.register.button.text">Kayıt Ol</string>
     <string name="register.screen.go.login.text">Giriş Yap</string>
+    <string name="register.screen.successfully.register.snackbar.message">Başarılı bir şekilde kayıt oldunuz! İçerde iyi eğlenceler.</string>
+    <string name="register.screen.successfully.register.snackbar.action.button.text">Git</string>
+    <string name="register_screen_empty_field_snackbar_message">Lütfen hiçbir alanı boş bırakmayınız.</string>
+    <string name="register_screen_password_match_error_snackbar_message">Parolalar aynı olmalı.</string>
 </resources>
