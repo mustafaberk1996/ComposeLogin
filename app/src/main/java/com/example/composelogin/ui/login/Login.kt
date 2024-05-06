@@ -200,7 +200,7 @@ fun Login(navigateRegister:()->Unit) {
             }
 
         }
-        SocialMediaArea(modifier = Modifier.align(Alignment.BottomCenter))
+
     }
 
 }
