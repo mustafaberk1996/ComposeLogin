@@ -1,5 +1,6 @@
 package com.example.composelogin.ui.login
 
+import android.content.Intent
 import android.util.Patterns
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,6 +23,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,11 +33,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composelogin.R
+import com.example.composelogin.ui.main.MainActivity
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -48,6 +52,8 @@ data class SnackbarState(
 )
 @Composable
 fun Register(navigateLogin: () -> Unit){
+
+    val context = LocalContext.current
 
     var name by rememberSaveable { mutableStateOf("") }
     var surname by rememberSaveable { mutableStateOf("") }
@@ -65,11 +71,13 @@ fun Register(navigateLogin: () -> Unit){
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) {contentPadding->
 
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(contentPadding)) {
 
             Column(modifier = Modifier
-                .align(alignment = Alignment.Center)
-                .padding(all = 10.dp),
+                .padding(all = 10.dp)
+                .align(alignment = Alignment.Center),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally) {
 
@@ -166,16 +174,14 @@ fun Register(navigateLogin: () -> Unit){
                     } else{
                         if (Patterns.EMAIL_ADDRESS.matcher(email).matches()){
                             visibleSnackbar = true
-                            snackbarState = if (password != passwordAgain){
-                                SnackbarState(
+                            if (password != passwordAgain){
+                                snackbarState = SnackbarState(
                                     message = R.string.register_screen_password_match_error_snackbar_message,
                                     actionText =null,
                                 )
                             }else{
-                                visibleSnackbar = true
-                                SnackbarState(
-                                    message = R.string.register_screen_successfully_register_snackbar_message,
-                                    actionText = R.string.register_screen_successfully_register_snackbar_action_button_text,
+                                context.startActivity(
+                                    Intent(context, MainActivity::class.java)
                                 )
                             }
                         }else{
@@ -215,18 +221,22 @@ fun Register(navigateLogin: () -> Unit){
 
         if (visibleSnackbar) {
             val message = stringResource(id = snackbarState.message)
-            val actionText =   if (snackbarState.actionText!=null) stringResource(id = snackbarState.actionText!!) else null
-            scope.launch {
-                val result =snackbarHostState.showSnackbar(
-                    message,
-                    actionText,
-                    false,
-                    snackbarState.duration
-                )
+            val actionText =
+                if (snackbarState.actionText != null) stringResource(id = snackbarState.actionText!!) else null
 
-                visibleSnackbar = when (result) {
-                    SnackbarResult.ActionPerformed -> false
-                    SnackbarResult.Dismissed -> false
+            LaunchedEffect(Unit) {
+                scope.launch {
+                    val result = snackbarHostState.showSnackbar(
+                        message,
+                        actionText,
+                        false,
+                        snackbarState.duration
+                    )
+
+                    visibleSnackbar = when (result) {
+                        SnackbarResult.ActionPerformed -> false
+                        SnackbarResult.Dismissed -> false
+                    }
                 }
             }
         }

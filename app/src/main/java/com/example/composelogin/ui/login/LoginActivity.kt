@@ -57,7 +57,7 @@ import com.example.composelogin.R
 import com.example.composelogin.ui.theme.ComposeLoginTheme
 import kotlinx.coroutines.delay
 
-class MainActivity : ComponentActivity() {
+class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -67,7 +67,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginActivity()
+                    LoginScreen()
                 }
             }
         }
@@ -75,7 +75,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun LoginActivity(modifier: Modifier = Modifier) {
+fun LoginScreen() {
     Box(modifier = Modifier.fillMaxSize()){
         val navController = rememberNavController()
         NavHost(navController = navController, startDestination = "login") {
@@ -91,7 +91,7 @@ fun LoginActivity(modifier: Modifier = Modifier) {
 @Composable
 private fun LoginMainScreenPreview() {
     MaterialTheme{
-        LoginActivity()
+        LoginScreen()
     }
 }
 
