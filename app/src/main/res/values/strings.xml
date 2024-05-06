@@ -25,4 +25,9 @@
     <string name="register.screen.outline.textfield.password.again.label">Password Again</string>
     <string name="register.screen.register.button.text">Register</string>
     <string name="register.screen.go.login.text">Login</string>
+
+    <string name="register.screen.successfully.register.snackbar.message">You have successfully registered! Have fun in there.</string>
+    <string name="register.screen.successfully.register.snackbar.action.button.text">Go</string>
+    <string name="register_screen_empty_field_snackbar_message">Please don\'t leave any field to register.</string>
+    <string name="register_screen_password_match_error_snackbar_message">Passwords must be same.</string>
 </resources>
