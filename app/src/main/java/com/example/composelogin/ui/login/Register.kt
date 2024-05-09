@@ -1,5 +1,6 @@
 package com.example.composelogin.ui.login
 
+import android.content.Context
 import android.content.Intent
 import android.util.Patterns
 import androidx.compose.foundation.border
@@ -180,9 +181,8 @@ fun Register(navigateLogin: () -> Unit, onSnackbarVisibleListener: (snackbarVisi
                                     actionText =null,
                                 )
                             }else{
-                                context.startActivity(
-                                    Intent(context, MainActivity::class.java)
-                                )
+                                visibleSnackbar = false
+                                goMainActivity(context, name, surname, email)
                             }
                         }else{
                             visibleSnackbar = true
@@ -243,6 +243,19 @@ fun Register(navigateLogin: () -> Unit, onSnackbarVisibleListener: (snackbarVisi
         }
     }
 }
+
+fun goMainActivity(context: Context, name: String, surname: String, email: String) {
+    val intent = Intent(context, MainActivity::class.java).apply {
+        putExtra(ARG_NAME, name)
+        putExtra(ARG_SURNAME, surname)
+        putExtra(ARG_EMAIL, email)
+    }
+    context.startActivity(intent)
+}
+
+const val ARG_NAME = "arg_name"
+const val ARG_SURNAME = "arg_surname"
+const val ARG_EMAIL = "arg_email"
 
 @Composable
 @Preview
