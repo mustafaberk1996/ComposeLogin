@@ -1,15 +1,20 @@
 package com.example.composelogin.ui.login
 
 import android.util.Patterns
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -32,11 +37,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,8 +65,6 @@ fun Register(
     navigateToMain: (name: String, surname: String, email: String) -> Unit
 ) {
 
-    val context = LocalContext.current
-
     var name by rememberSaveable { mutableStateOf("") }
     var surname by rememberSaveable { mutableStateOf("") }
     var email by rememberSaveable { mutableStateOf("") }
@@ -67,6 +72,7 @@ fun Register(
     var passwordAgain by rememberSaveable { mutableStateOf("") }
     var snackbarState by remember { mutableStateOf(SnackbarState()) }
     var visibleSnackbar by remember { mutableStateOf(false) }
+    var passwordVisibility by remember { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -136,40 +142,66 @@ fun Register(
                     },
                 )
 
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(26.dp),
-                    value = password,
-                    onValueChange = { password = it },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    label = { Text(text = stringResource(id = R.string.register_screen_outline_textfield_password_label)) },
-                    visualTransformation =  PasswordVisualTransformation(),
-                    placeholder = {
-                        Text(
-                            text = stringResource(id = R.string.register_screen_outline_textfield_password_label).lowercase(
-                                Locale.getDefault()
-                            )
-                        )
-                    },
-                )
 
-                OutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(26.dp),
-                    value = passwordAgain,
-                    onValueChange = { passwordAgain = it },
-                    label = { Text(text = stringResource(id = R.string.register_screen_outline_textfield_password_again_label)) },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    placeholder = {
-                        Text(
-                            text = stringResource(id = R.string.register_screen_outline_textfield_password_again_label).lowercase(
-                                Locale.getDefault()
-                            )
+                val painterPasswordEye =
+                    if (passwordVisibility) painterResource(id = R.drawable.eye_slash_path) else painterResource(
+                        id = R.drawable.eye_path
+                    )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Column(modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)) {
+                        OutlinedTextField(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            shape = RoundedCornerShape(26.dp),
+                            value = password,
+                            onValueChange = { password = it },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                            label = { Text(text = stringResource(id = R.string.register_screen_outline_textfield_password_label)) },
+                            visualTransformation = if(passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                            placeholder = {
+                                Text(
+                                    text = stringResource(id = R.string.register_screen_outline_textfield_password_label).lowercase(
+                                        Locale.getDefault()
+                                    )
+                                )
+                            },
                         )
-                    },
-                )
+
+                        OutlinedTextField(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            shape = RoundedCornerShape(26.dp),
+                            value = passwordAgain,
+                            onValueChange = { passwordAgain = it },
+                            label = { Text(text = stringResource(id = R.string.register_screen_outline_textfield_password_again_label)) },
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                            visualTransformation = if(passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                            placeholder = {
+                                Text(
+                                    text = stringResource(id = R.string.register_screen_outline_textfield_password_again_label).lowercase(
+                                        Locale.getDefault()
+                                    )
+                                )
+                            },
+                        )
+                    }
+                    Image(
+                        painter = painterPasswordEye,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(40.dp)
+                            .fillMaxWidth()
+                            .clip(CircleShape)
+                            .background(color = Color.LightGray)
+                            .clickable {
+                                passwordVisibility = !passwordVisibility
+                            }
+                    )
+                }
 
                 Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
