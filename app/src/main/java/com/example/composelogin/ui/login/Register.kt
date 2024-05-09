@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -34,6 +35,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -121,6 +124,7 @@ fun Register(
                         .fillMaxWidth(),
                     shape = RoundedCornerShape(26.dp),
                     value = email,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     onValueChange = { email = it },
                     label = { Text(text = stringResource(id = R.string.register_screen_outline_textfield_email_label)) },
                     placeholder = {
@@ -138,7 +142,9 @@ fun Register(
                     shape = RoundedCornerShape(26.dp),
                     value = password,
                     onValueChange = { password = it },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     label = { Text(text = stringResource(id = R.string.register_screen_outline_textfield_password_label)) },
+                    visualTransformation =  PasswordVisualTransformation(),
                     placeholder = {
                         Text(
                             text = stringResource(id = R.string.register_screen_outline_textfield_password_label).lowercase(
@@ -155,6 +161,7 @@ fun Register(
                     value = passwordAgain,
                     onValueChange = { passwordAgain = it },
                     label = { Text(text = stringResource(id = R.string.register_screen_outline_textfield_password_again_label)) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     placeholder = {
                         Text(
                             text = stringResource(id = R.string.register_screen_outline_textfield_password_again_label).lowercase(

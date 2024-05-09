@@ -124,6 +124,7 @@ fun Login(navigateRegister:()->Unit,navigateToMain:(email:String)->Unit,) {
                 value = email,
                 onValueChange = { email = it },
                 label = { Text(text = stringResource(id = R.string.login_screen_outline_textfield_email_label)) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 placeholder = {
                     Text(text = stringResource(id = R.string.login_screen_outline_textfield_email_label).lowercase(
                         Locale.getDefault()
