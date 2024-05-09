@@ -1,5 +1,7 @@
 package com.example.composelogin.ui.login
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -42,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -54,6 +57,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.composelogin.Constants
 import com.example.composelogin.R
+import com.example.composelogin.ui.main.MainActivity
 import com.example.composelogin.ui.theme.ComposeLoginTheme
 import kotlinx.coroutines.delay
 
@@ -61,34 +65,57 @@ class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val context = LocalContext.current
             ComposeLoginTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    LoginScreen()
+                    LoginScreen {name, surname, email ->
+                        goMainActivity(context, name, surname, email)
+                    }
                 }
             }
         }
     }
 }
 
+fun goMainActivity(context: Context, name: String, surname: String, email: String) {
+    val intent = Intent(context, MainActivity::class.java).apply {
+        putExtra(ARG_NAME, name)
+        putExtra(ARG_SURNAME, surname)
+        putExtra(ARG_EMAIL, email)
+    }
+    context.startActivity(intent)
+}
+
+const val ARG_NAME = "arg_name"
+const val ARG_SURNAME = "arg_surname"
+const val ARG_EMAIL = "arg_email"
+
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navigateToMain:(name:String, surname:String, email:String)->Unit) {
     Box(modifier = Modifier.fillMaxSize()){
         val navController = rememberNavController()
         var visibleSocialMediaArea by remember {
             mutableStateOf(true)
         }
         NavHost(navController = navController, startDestination = "login") {
-            composable("login") { Login(){navController.navigate("register")} }
+            composable("login") {
+                Login(navigateRegister = { navController.navigate("register") }, navigateToMain = {email->
+                    navigateToMain("", "", email)
+                })
+            }
             composable("register") {
                 Register(
                     onSnackbarVisibleListener = { snackbarVisiblity ->
                         visibleSocialMediaArea = !snackbarVisiblity
                     },
-                    navigateLogin = { navController.navigate("login") }
+                    navigateLogin = { navController.navigate("login") },
+                    navigateToMain = {name, surname, email ->
+                        navigateToMain(name, surname, email)
+                    }
                 )
             }
         }
@@ -101,7 +128,9 @@ fun LoginScreen() {
 @Composable
 private fun LoginMainScreenPreview() {
     MaterialTheme{
-        LoginScreen()
+        LoginScreen(
+            navigateToMain = {name, surname, email ->  }
+        )
     }
 }
 

@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,7 +43,7 @@ import com.example.composelogin.ui.theme.ComposeLoginTheme
 import java.util.Locale
 
 @Composable
-fun Login(navigateRegister:()->Unit) {
+fun Login(navigateRegister:()->Unit,navigateToMain:(email:String)->Unit,) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -88,7 +89,7 @@ fun Login(navigateRegister:()->Unit) {
                     },
                     onConfirmation = {
                         showLoggedInDialog = false
-                        Toast.makeText(context, toastMessage, Toast.LENGTH_LONG).show()
+                        navigateToMain(email)
                     }
                 )
             }
@@ -177,7 +178,10 @@ fun Login(navigateRegister:()->Unit) {
                     .fillMaxWidth()
                     .padding(top = 10.dp)
             ) {
-                Text(text = stringResource(id = R.string.login_screen_login_button_text))
+                Text(
+                    text = stringResource(id = R.string.login_screen_login_button_text),
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
 
             Text(text = stringResource(id = R.string.or_label_text), fontSize = 12.sp, modifier = Modifier.padding(top = 10.dp))
@@ -210,6 +214,6 @@ fun Login(navigateRegister:()->Unit) {
 @Composable
 fun LoginPreview() {
     ComposeLoginTheme {
-        Login(){}
+        Login(navigateRegister = {}, navigateToMain = {})
     }
 }

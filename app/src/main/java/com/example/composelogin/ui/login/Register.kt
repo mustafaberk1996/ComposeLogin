@@ -1,7 +1,5 @@
 package com.example.composelogin.ui.login
 
-import android.content.Context
-import android.content.Intent
 import android.util.Patterns
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -40,7 +38,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.composelogin.R
-import com.example.composelogin.ui.main.MainActivity
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -52,7 +49,11 @@ data class SnackbarState(
     val duration: SnackbarDuration = SnackbarDuration.Short
 )
 @Composable
-fun Register(navigateLogin: () -> Unit, onSnackbarVisibleListener: (snackbarVisiblity:Boolean) -> Unit) {
+fun Register(
+    navigateLogin: () -> Unit,
+    onSnackbarVisibleListener: (snackbarVisibility: Boolean) -> Unit,
+    navigateToMain: (name: String, surname: String, email: String) -> Unit
+) {
 
     val context = LocalContext.current
 
@@ -182,7 +183,7 @@ fun Register(navigateLogin: () -> Unit, onSnackbarVisibleListener: (snackbarVisi
                                 )
                             }else{
                                 visibleSnackbar = false
-                                goMainActivity(context, name, surname, email)
+                                navigateToMain(name, surname, email)
                             }
                         }else{
                             visibleSnackbar = true
@@ -194,7 +195,10 @@ fun Register(navigateLogin: () -> Unit, onSnackbarVisibleListener: (snackbarVisi
                     }
 
                 }, modifier = Modifier.fillMaxWidth()) {
-                    Text(text = stringResource(id = R.string.register_screen_register_button_text))
+                    Text(
+                        text = stringResource(id = R.string.register_screen_register_button_text),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
                 }
 
                 Text(text = stringResource(id = R.string.or_label_text), fontSize = 12.sp, modifier = Modifier.padding(top = 10.dp))
@@ -244,19 +248,6 @@ fun Register(navigateLogin: () -> Unit, onSnackbarVisibleListener: (snackbarVisi
     }
 }
 
-fun goMainActivity(context: Context, name: String, surname: String, email: String) {
-    val intent = Intent(context, MainActivity::class.java).apply {
-        putExtra(ARG_NAME, name)
-        putExtra(ARG_SURNAME, surname)
-        putExtra(ARG_EMAIL, email)
-    }
-    context.startActivity(intent)
-}
-
-const val ARG_NAME = "arg_name"
-const val ARG_SURNAME = "arg_surname"
-const val ARG_EMAIL = "arg_email"
-
 @Composable
 @Preview
 fun RegisterPreview() {
@@ -265,10 +256,11 @@ fun RegisterPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-
-            Register({
-
-            }) { visible -> }
+            Register(
+                navigateLogin = {},
+                navigateToMain = {name, surname, email ->  },
+                onSnackbarVisibleListener = {}
+            )
         }
     }
 }
