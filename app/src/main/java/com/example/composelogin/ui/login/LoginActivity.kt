@@ -70,9 +70,9 @@ class LoginActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.onPrimary
                 ) {
-                    LoginScreen {name, surname, email ->
+                    LoginScreen { name, surname, email ->
                         goMainActivity(context, name, surname, email)
                     }
                 }
@@ -132,107 +132,6 @@ private fun LoginMainScreenPreview() {
             navigateToMain = {name, surname, email ->  }
         )
     }
-}
-
-@Composable
-fun ImageSlider() {
-    var randomImage by remember { mutableStateOf(Constants.flowerLinks.random()) }
-
-    Box{
-        AsyncImage(
-            model = randomImage,
-            contentDescription = "",
-            modifier = Modifier
-                .fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(color = colorResource(id = R.color.slider_image_white_shadow)))
-
-        SliderProgressBar {
-            randomImage = Constants.flowerLinks.random()
-        }
-    }
-}
-
-@Preview
-@Composable
-fun ImageSliderPreview(){
-    ImageSlider()
-}
-
-@Composable
-fun SliderProgressBar(timeFinished:()->Unit){
-
-    var progress by remember { mutableStateOf(1f) }
-
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(5)
-            progress -= 0.001f
-            if (progress <= 0f) {
-                timeFinished()
-                progress = 0f
-                progress = 1.0f
-            }
-        }
-    }
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(8.dp)
-            .background(
-                color = Color.Transparent, shape = RoundedCornerShape(4.dp)
-            )
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(progress)
-                .height(8.dp)
-                .background(
-                    color = MaterialTheme.colorScheme.primary, shape = RoundedCornerShape(4.dp)
-                )
-        )
-    }
-}
-
-
-@Composable
-fun ProfileImageComponent(randomUserImageLink: String) {
-    var borderSize by remember { mutableStateOf(1.dp) }
-
-    val animatedBorderSize by animateFloatAsState(
-        targetValue = borderSize.value,
-        animationSpec = tween(durationMillis = 1000), label = ""
-    )
-    var borderColor by remember { mutableStateOf(Color.Black) }
-
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(3000)
-            borderSize = (1..10).random().dp
-            borderColor = Color(
-                (0..255).random(),
-                (0..255).random(),
-                (0..255).random()
-            )
-        }
-    }
-
-    AsyncImage(
-        placeholder = painterResource(id = R.drawable.ic_spa_duo),
-        model = randomUserImageLink,
-        contentDescription = "",
-        modifier = Modifier
-            .size(150.dp)
-            .fillMaxSize()
-            .clip(CircleShape)
-            .border(animatedBorderSize.dp, color = borderColor, shape = CircleShape),
-        contentScale = ContentScale.Crop
-    )
 }
 
 @Composable
